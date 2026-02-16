@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-eMule cancelled.met generator V2.0
+eMule cancelled.met generator V2.1
 with intermediate hash file support
 https://github.com/ljt3705/emule-cancelled-met-generator
 
@@ -220,9 +220,9 @@ def scan_and_generate(args):
     write_cancelled_met(output_path, seed, unique_hh)
     print(f"\nGenerated {output_path} with {len(unique_hh)} entries (seed={seed}).")
 
-    # If save file requested, write original hashes (hex) to a text file
+    # If save file requested, write original hashes (hex) to a text file (UTF-8 encoding)
     if args.save:
-        with open(args.save, 'w') as f:
+        with open(args.save, 'w', encoding='utf-8') as f:
             f.write(f"# Seed: {seed}\n")
             f.write(f"# Each line: file_hash (hex) [filepath]\n")
             for filepath, file_hash in file_hashes:
@@ -231,15 +231,15 @@ def scan_and_generate(args):
 
 
 def generate_from_hashfile(args):
-    """Mode 2: generate cancelled.met from a hash file."""
+    """Mode 2: generate cancelled.met from a hash file (UTF-8 encoding assumed)."""
     infile = args.infile
     if not os.path.isfile(infile):
         print(f"Error: '{infile}' is not a file.")
         sys.exit(1)
 
-    # Read hash file
+    # Read hash file (UTF-8)
     file_hashes = []
-    with open(infile, 'r') as f:
+    with open(infile, 'r', encoding='utf-8') as f:
         for line_num, line in enumerate(f, 1):
             line = line.strip()
             if not line or line.startswith('#'):
@@ -293,7 +293,7 @@ def generate_from_hashfile(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='eMule cancelled.met generator V2.0\nwith intermediate hash file support\nhttps://github.com/ljt3705/emule-cancelled-met-generator\n\nGenerate eMule cancelled.met file from files or precomputed hash list.',
+        description='eMule cancelled.met generator V2.1\nwith intermediate hash file support\nhttps://github.com/ljt3705/emule-cancelled-met-generator\n\nGenerate eMule cancelled.met file from files or precomputed hash list.',
         epilog='Examples:\n'
                '  python gen_canc.py -d D:\\downloads -bypass 200 -save hashes.txt\n'
                '  python gen_canc.py -infile hashes.txt -o combined.met -seed 12345',
